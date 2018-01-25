@@ -92,4 +92,28 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             }
         }
     }
+    data class SlideImageRenderer(var view:SlideImageView,var time:Int = 0) {
+        val animator = SlideImageAnimator(view)
+        var container:SlideImageContainer?=null
+        fun render(canvas:Canvas,paint:Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                container = SlideImageContainer(view.bitmap,w,h)
+            }
+            canvas.drawColor(Color.parseColor("#212121"))
+            container?.draw(canvas,paint)
+            time++
+            animator.animate {
+                container?.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            container?.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
