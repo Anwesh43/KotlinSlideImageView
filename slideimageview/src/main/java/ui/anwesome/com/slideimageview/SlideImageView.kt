@@ -28,7 +28,12 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             var sy = i*(h/n)
             var k = i%2
             var ki = (i+1)%2
-            canvas.drawBitmap(bitmap,Rect(0,0,bitmap.width,bitmap.height),RectF(k*w*(1-scale),sy,w*(k+ki*scale),sy+h/n),paint)
+            canvas.save()
+            val path = Path()
+            path.addRect(RectF(k*w*(1-scale),sy,w*(k+ki*scale),sy+h/n),Path.Direction.CW)
+            canvas.clipPath(path)
+            canvas.drawBitmap(bitmap,Rect(0,0,bitmap.width,bitmap.height),RectF(0f,0f,w,h),paint)
+            canvas.restore()
         }
     }
     data class SlideImageContainer(var bitmap:Bitmap,var w:Float,var h:Float,var n:Int = 10) {
@@ -74,7 +79,7 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             if(animated) {
                 updatecb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(70)
                     view.invalidate()
                 }
                 catch(ex:Exception) {
