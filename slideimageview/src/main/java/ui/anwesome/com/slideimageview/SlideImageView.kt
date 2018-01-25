@@ -30,6 +30,7 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         }
     }
     data class SlideImageContainer(var bitmap:Bitmap,var w:Float,var h:Float,var n:Int = 10) {
+        val state = SlideImageState()
         val slides:ConcurrentLinkedQueue<SlideImage> = ConcurrentLinkedQueue<SlideImage>()
         init {
             bitmap = Bitmap.createScaledBitmap(bitmap,w.toInt(),h.toInt(),true)
@@ -39,14 +40,14 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         }
         fun draw(canvas:Canvas,paint:Paint) {
             slides.forEach {
-                it.draw(canvas,paint,bitmap,w,h,n,1f)
+                it.draw(canvas,paint,bitmap,w,h,n,state.scale)
             }
         }
         fun update(stopcb:(Float)->Unit) {
-
+            state.update(stopcb)
         }
         fun startUpdating(startcb:()->Unit) {
-
+            state.startUpdating(startcb)
         }
     }
     data class SlideImageState(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
