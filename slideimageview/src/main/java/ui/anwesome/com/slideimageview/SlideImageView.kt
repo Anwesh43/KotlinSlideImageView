@@ -6,6 +6,8 @@ package ui.anwesome.com.slideimageview
 import android.view.*
 import android.content.*
 import android.graphics.*
+import java.util.concurrent.ConcurrentLinkedQueue
+
 class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     override fun onDraw(canvas:Canvas) {
@@ -25,6 +27,26 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             var k = i%2
             var ki = (i+1)%2
             canvas.drawBitmap(bitmap,Rect(0,0,bitmap.width,bitmap.height),RectF(k*w*(1-scale),sy,w*(k+ki*scale),sy+h/n),paint)
+        }
+    }
+    data class SlideImageContainer(var bitmap:Bitmap,var w:Float,var h:Float,var n:Int = 10) {
+        val slides:ConcurrentLinkedQueue<SlideImage> = ConcurrentLinkedQueue<SlideImage>()
+        init {
+            bitmap = Bitmap.createScaledBitmap(bitmap,w.toInt(),h.toInt(),true)
+            for(i in 0..n-1) {
+                slides.add(SlideImage(i))
+            }
+        }
+        fun draw(canvas:Canvas,paint:Paint) {
+            slides.forEach {
+                it.draw(canvas,paint,bitmap,w,h,n,1f)
+            }
+        }
+        fun update(stopcb:(Float)->Unit) {
+
+        }
+        fun startUpdating(startcb:()->Unit) {
+
         }
     }
 }
