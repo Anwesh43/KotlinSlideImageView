@@ -3,6 +3,7 @@ package ui.anwesome.com.slideimageview
 /**
  * Created by anweshmishra on 26/01/18.
  */
+import android.app.Activity
 import android.view.*
 import android.content.*
 import android.graphics.*
@@ -115,6 +116,13 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             container?.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity:Activity,bitmap:Bitmap):SlideImageView {
+            val view = SlideImageView(activity,bitmap)
+            activity.setContentView(view)
+            return view
         }
     }
 }
