@@ -3,6 +3,7 @@ package ui.anwesome.com.kotlinslideimageview
 import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 import ui.anwesome.com.slideimageview.SlideImageView
 
@@ -16,5 +17,10 @@ class MainActivity : AppCompatActivity() {
         },{
             Toast.makeText(this,"it's off",Toast.LENGTH_SHORT).show()
         })
+        fullScreen()
     }
+}
+fun AppCompatActivity.fullScreen() {
+    supportActionBar?.hide()
+    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 }
