@@ -119,8 +119,8 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
                 container?.update {
                     animator.stop()
                     when(it) {
-                        0f -> view.slideImageListener?.onSlideListener?.invoke()
-                        1f -> view.slideImageListener?.offSlideListener?.invoke()
+                        1f -> view.slideImageListener?.onSlideListener?.invoke()
+                        0f -> view.slideImageListener?.offSlideListener?.invoke()
                     }
                 }
             }
