@@ -44,15 +44,24 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         val state = SlideImageState()
         val slides:ConcurrentLinkedQueue<SlideImage> = ConcurrentLinkedQueue<SlideImage>()
         init {
-            bitmap = Bitmap.createScaledBitmap(bitmap,w.toInt(),h.toInt(),true)
+            bitmap = Bitmap.createScaledBitmap(bitmap,w.toInt(),(0.8*h).toInt(),true)
             for(i in 0..n-1) {
                 slides.add(SlideImage(i))
             }
         }
         fun draw(canvas:Canvas,paint:Paint) {
+            paint.style = Paint.Style.FILL
             slides.forEach {
-                it.draw(canvas,paint,bitmap,w,h,n,state.scale)
+                it.draw(canvas,paint,bitmap,w,4*h/5,n,state.scale)
             }
+            paint.color = Color.parseColor("#4527A0")
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = Math.min(w,h)/45
+            paint.strokeCap = Paint.Cap.ROUND
+            canvas.save()
+            canvas.translate(w/2,9*h/10)
+            canvas.drawArc(RectF(-h/12,-h/12,h/12,h/12),270f-180f*state.scale,360f*state.scale,false,paint)
+            canvas.restore()
         }
         fun update(stopcb:(Float)->Unit) {
             state.update(stopcb)
