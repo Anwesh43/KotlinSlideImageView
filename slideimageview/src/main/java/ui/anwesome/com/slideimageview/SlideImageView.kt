@@ -12,6 +12,10 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     val renderer = SlideImageRenderer(this)
+    var slideImageListener:SlideImageListener?=null
+    fun addSlideImageListener(onSlideListener:()->Unit,offSlideListener:()->Unit) {
+        slideImageListener = SlideImageListener(onSlideListener,offSlideListener)
+    }
     override fun onDraw(canvas:Canvas) {
         renderer?.render(canvas,paint)
     }
@@ -114,6 +118,10 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             animator.animate {
                 container?.update {
                     animator.stop()
+                    when(it) {
+                        0f -> view.slideImageListener?.onSlideListener?.invoke()
+                        1f -> view.slideImageListener?.offSlideListener?.invoke()
+                    }
                 }
             }
         }
@@ -130,4 +138,5 @@ class SlideImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             return view
         }
     }
+    data class SlideImageListener(var onSlideListener:()->Unit,var offSlideListener:()->Unit)
 }
